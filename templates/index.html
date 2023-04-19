@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lights Camera Action</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  </head>
+  <body bgcolor="#000000">
+    <header>
+      <div class="logo">
+        <img src= "{{ url_for('static',filename='styles/Logo.png') }}" alt="Logo">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Movies</a></li>
+          <li><a href="#">TV Shows</a></li>
+          <li><a href="#">My Library</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    <div class="search-bar">
+      <input  id = "youtube_url_box" type="text" name="search" placeholder="What do you want to watch ?">
+      <button id = "button_url_update" class="search-button"> Stream </button>
+  </div>
+
+    <video class="video-container" width="854" height="480" muted = "muted" controls controlsList="nodownload" >
+      <source id = "running_src" type="video/mp4">
+      </video>
+    
+   
+    
+      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+      <script defer src="{{url_for('static', filename = 'index.js')}}"></script>
+
+  </body>
+</html>
