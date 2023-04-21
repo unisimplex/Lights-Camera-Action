@@ -8,19 +8,15 @@ from termcolor import cprint
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key?'
 socketio = SocketIO(app)
-# socketio = SocketIO(app, cors_allowed_origins='*')
 
-# THRESH_IGNORANCE = 12 # means ignoring others for 12s, debugging purposes
+
 THRESH_IGNORANCE = 1
-# THRESH_IGNORANCE = 0.5
-# THRESH_IGNORANCE = 0 #means never ignoring anyone - causes the infinite loop issue
 
 
 @app.route("/")
 def homepage():
 	return render_template('index.html')
 
-# note that connect, disconnect, json and message are keywords
 
 @socketio.on('explicit_request_for_state')
 def explicit_state_request():
@@ -85,8 +81,6 @@ def state_change_for_all(potential_new):
 
 def get_streamable_url(youtube_url):
 	temp = pafy.new(youtube_url)
-	#LATER - check which stream this is - dont need super high quality
-	#return temp.allstreams[-1].url_https
 	return temp.getbest().url_https
 
 def fresh_state(youtube_url):
