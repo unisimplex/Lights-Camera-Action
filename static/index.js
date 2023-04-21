@@ -6,7 +6,6 @@ const vid_src = document.getElementById('running_src')
 const socket = io(window.location.href)
 
 // parameters 
-// if the new tms is within this margin of the current tms, then the change is ignored for smoother viewing
 const PLAYING_THRESH = 1 
 const PAUSED_THRESH = 0.01
 
@@ -36,7 +35,6 @@ submit_button.onclick =  (event) => {
 	state_change_handler()
 }
 
-// connection event, sever sends a state update whenever a new connection is made
 socket.on("connect", () => {
 	console.log("Socket connection establised to the server")
 })
@@ -55,7 +53,6 @@ socket.on("state_update_from_server", (state) => {
 		client_uid = state.client_uid;
 	}
 
-	// someone changed the video
 	if (vid_src.src !== state.streamable_url){
 		vid.pause()
 		raw_url = state.raw_url
@@ -64,7 +61,6 @@ socket.on("state_update_from_server", (state) => {
 		vid.load()
 	} 
 
-	// calculating the new timestamp for both cases - when the video is playing and when it is paused
 	let proposed_time = (state.playing) ? ((state.video_timestamp - state.global_timestamp) + get_global_time(correction) ) : (state.video_timestamp)
 	let gap = Math.abs(proposed_time - vid.currentTime)
 
@@ -80,7 +76,6 @@ socket.on("state_update_from_server", (state) => {
 	else{
 		vid.pause()
 		if (gap > PAUSED_THRESH){
-			// condition to prevent an unnecessary seek
 			vid.currentTime = proposed_time
 		}
 	}
@@ -113,7 +108,6 @@ vid.onseeking = state_change_handler
 vid.onplay = state_change_handler
 vid.onpause = state_change_handler
 
-// handling the video ended case separately
 vid.onended = () => {
 	video_playing = false
 	last_updated = get_global_time(correction)
@@ -136,7 +130,6 @@ function median(values){
 function get_global_time(delta = 0){
 	let d = new Date()
 	let t = d.getTime()/1000
-	// delta is the correction parameter
 	return t + delta
 }
 
@@ -151,7 +144,6 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// time requests are made every second
 let do_time_sync = async () => {
 	for(let i = 0; i < num_time_sync_cycles; i++){
 		await timeout(1000)
